@@ -1,6 +1,6 @@
 <div class="flex h-screen">
   <aside class="bg-white">
-    <div class="flex justify-between p-4 items-center align-middle">
+    <div class="flex justify-between px-4 py-2 items-center align-middle">
       <h1 [ngClass]="{'hidden': collapsedMenu}"
           class="text-2xl text-blue-500 font-semibold">LOGO</h1>
       <button (click)="toggleMenu()" [ngClass]="{'rotate-180': collapsedMenu}">
@@ -16,11 +16,17 @@
     <nav>
       <div *ngFor="let section of sections">
         <div class="flex justify-between w-full space-x-4 items-center align-middle px-4 py-2">
-          <img ngSrc="{{section.iconUrl}}" height="24" width="24" alt="">
+          <button (click)="selectSection(section.id)">
+            <img ngSrc="{{section.iconUrl}}" height="24" width="24"
+                 [style.filter]="section.isSelected ? 'invert(41%) sepia(91%) saturate(593%) hue-rotate(183deg) brightness(98%) contrast(98%)' : ''"
+                 alt="">
+          </button>
           <button (click)="expandSection(section.id)" [ngClass]="{'hidden': collapsedMenu}"
-                  class="flex justify-between w-full space-x-4 items-center align-middle">
-            <p class="text-gray-800 text-sm hover:text-blue-500">{{ section.title }}</p>
-            <div [ngClass]="{'hidden': section.items.length === 0, 'rotate-90': section.isExpanded}">
+                  class="flex justify-between text-gray-800 w-full space-x-4 items-center align-middle">
+            <p [ngClass]="{'text-blue-500': section.isSelected}"
+               class="text-sm hover:text-blue-500">{{ section.title }}</p>
+            <div [ngClass]="{'hidden': section.items.length === 0, 'rotate-90': section.isExpanded}"
+                 [style.filter]="section.isSelected ? 'invert(41%) sepia(91%) saturate(593%) hue-rotate(183deg) brightness(98%) contrast(98%)' : ''">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M15.3998 9.88001L10.8098 5.29001C10.6224 5.10376 10.369 4.99922 10.1048 4.99922C9.84062 4.99922 9.58716 5.10376 9.3998 5.29001C9.30607 5.38298 9.23168 5.49358 9.18091 5.61544C9.13014 5.7373 9.104 5.868 9.104 6.00001C9.104 6.13203 9.13014 6.26273 9.18091 6.38459C9.23168 6.50645 9.30607 6.61705 9.3998 6.71001L13.9998 11.29C14.0935 11.383 14.1679 11.4936 14.2187 11.6154C14.2695 11.7373 14.2956 11.868 14.2956 12C14.2956 12.132 14.2695 12.2627 14.2187 12.3846C14.1679 12.5065 14.0935 12.6171 13.9998 12.71L9.3998 17.29C9.2115 17.477 9.10518 17.7311 9.10425 17.9965C9.10331 18.2618 9.20783 18.5167 9.3948 18.705C9.58178 18.8933 9.8359 18.9996 10.1013 19.0006C10.3666 19.0015 10.6215 18.897 10.8098 18.71L15.3998 14.12C15.9616 13.5575 16.2772 12.795 16.2772 12C16.2772 11.205 15.9616 10.4425 15.3998 9.88001Z"
@@ -31,15 +37,17 @@
         </div>
         <div class="px-4" [ngClass]="{'hidden': !section.isExpanded}">
           <ul *ngIf="section.items.length > 0"
-              class="border-l-2 border-l-blue-500">
-            <li *ngFor="let item of section.items"
+              class="border-l-2 border-l-blue-500 text-gray-800">
+            <li *ngFor="let item of section.items" (click)="selectItem(section.id, item.id)"
+                [ngClass]="{'text-blue-500 bg-blue-100': item.isSelected}"
                 class="flex space-x-4 px-4 items-center align-middle hover:bg-blue-100 rounded-r-sm">
-              <div>
+              <div
+                [style.filter]="item.isSelected ? 'invert(41%) sepia(91%) saturate(593%) hue-rotate(183deg) brightness(98%) contrast(98%)' : ''">
                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="4" cy="4" r="3" stroke="#22313F" stroke-width="2"/>
                 </svg>
               </div>
-              <p class="text-gray-800 text-sm hover:text-blue-500">{{ item.text }}</p>
+              <p class="text-sm hover:text-blue-500">{{ item.text }}</p>
             </li>
           </ul>
         </div>
@@ -47,7 +55,7 @@
     </nav>
   </aside>
   <div class="flex-1 w-full overflow-auto">
-    <header class="flex justify-between items-center align-middle p-4 bg-white">
+    <header class="flex justify-between items-center align-middle px-4 py-2 bg-white sticky top-0">
       <h1 class="text-2xl text-blue-500 font-semibold">
         HỆ THỐNG BÁN LẺ
       </h1>
